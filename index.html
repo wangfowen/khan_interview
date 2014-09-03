@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+  <title>Challenge Framework</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="HandheldFriendly" content="true">
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+
+  <link rel="stylesheet" href="codemirror.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<p>Advanced Unit Tests:</p>
+<textarea id="tests"></textarea>
+
+<p>Student Code:</p>
+<textarea id="code"></textarea>
+
+<p>Test Results:</p>
+<div id="output"></div>
+
+<div id="description"></div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="codemirror.js"></script>
+  <script>
+    $(function() {
+      var tests = CodeMirror.fromTextArea(document.getElementById('tests'), {
+        mode: 'javascript'
+      });
+      tests.setSize(null, 150);
+
+      var code = CodeMirror.fromTextArea(document.getElementById('code'), {
+        mode: 'javascript'
+      });
+      code.setSize(null, 300);
+      //TODO: how get input from code mirror?
+
+      //TODO: write whitelist function
+      //TODO: write blacklist function
+      //TODO: write rough structure function
+      //TODO: make it easy to add additional APIs
+
+      //TODO: on type:
+      //TODO: parse javascript in code
+      //TODO: eval code from tests on parsed javascript
+    });
+  </script>
+
+</body>
+</html>
+
