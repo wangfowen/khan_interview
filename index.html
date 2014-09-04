@@ -11,43 +11,61 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div id="description"></div>
 
-<p>Advanced Unit Tests:</p>
-<textarea id="tests"></textarea>
+  <p>Advanced Unit Tests:</p>
+  <textarea id="tests"></textarea>
 
-<p>Student Code:</p>
-<textarea id="code"></textarea>
+  <p>Student Code:</p>
+  <textarea id="code"></textarea>
 
-<p>Test Results:</p>
-<div id="output"></div>
+  <p>Test Results:</p>
+  <div id="output"></div>
 
-<div id="description"></div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="codemirror.js"></script>
+  <script src="acorn.js"></script>
   <script>
-    $(function() {
-      var tests = CodeMirror.fromTextArea(document.getElementById('tests'), {
+    //TODO: write whitelist function
+    //TODO: write blacklist function
+    //TODO: write rough structure function
+    //TODO: make it easy to add additional APIs
+
+    (function() {
+      var $tests = CodeMirror.fromTextArea(document.getElementById('tests'), {
         mode: 'javascript'
       });
-      tests.setSize(null, 150);
+      $tests.setSize(null, 100);
 
-      var code = CodeMirror.fromTextArea(document.getElementById('code'), {
+      $tests.setValue(
+        "TODO: example API calls"
+      );
+
+      var $code = CodeMirror.fromTextArea(document.getElementById('code'), {
         mode: 'javascript'
       });
-      code.setSize(null, 300);
-      //TODO: how get input from code mirror?
+      $code.setSize(null, 200);
 
-      //TODO: write whitelist function
-      //TODO: write blacklist function
-      //TODO: write rough structure function
-      //TODO: make it easy to add additional APIs
+      var $output = document.getElementById('output');
 
-      //TODO: on type:
-      //TODO: parse javascript in code
-      //TODO: eval code from tests on parsed javascript
-    });
+      $code.on("change", function() {
+        try {
+          var input = $code.getValue();
+          if (input === "") {
+            $output.innerHTML = "";
+            return;
+          }
+
+          var parsed = acorn.parse(input);
+
+          //TODO: eval code from tests on parsed javascript
+
+          $output.innerHTML = parsed;
+        } catch (err) {
+          $output.innerHTML = "Invalid javascript";
+        }
+      });
+    })();
   </script>
-
 </body>
 </html>
 

@@ -5,8 +5,11 @@ body {
 }
 
 .CodeMirror {
-  text-align: left;
   border: 1px solid #CCCCCC;
+}
+
+#output, #description, .CodeMirror {
+  text-align: left;
   padding: 5px;
   margin: auto;
   max-width: 500px;
@@ -15,4 +18,3 @@ body {
 p {
   margin-bottom: 2px;
 }
-
