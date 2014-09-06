@@ -13,8 +13,6 @@ Test box for niceness.
 
 - mustContain(_type_) - _type_ is a string which matches one of the Node object types found in the [Mozilla parser API](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API#Node_objects). Tests to see if the Node object of type _type_ is within the AST wrapped by the Code object - essentially a whitelist of functionality. Returns a Code object with the first Node of type _type_ as the root of the AST. Empty AST if not found.
 
-    __Examples__:
-
     ```javascript
     code.mustContain("ForStatement");
     code.mustContain("VariableDeclaration");
@@ -23,8 +21,6 @@ Test box for niceness.
 
 - mustNotContain(_type_) - same situation as mustContain, except returns the same Code object if the Node is not in the AST and returns nothing if it is contained. Used to test for a blacklist of functionality.
 
-    __Examples__:
-
     ```javascript
     code.mustNotContain("WhileStatement");
     code.mustNotContain("IfStatement");
@@ -32,8 +28,6 @@ Test box for niceness.
     is equivalent to "This program MUST NOT use a 'while loop' or an 'if statement'."
 
 - whichMustContain(_type_) - an alias for mustContain. Sounds better when you're chaining to determine the rough structure of a program.
-
-    __Examples__:
 
     ```javascript
     code.mustContain("ForStatement")
@@ -49,7 +43,6 @@ Test box for niceness.
 - whichMustNotContain(_type_) - an alias for mustNotContain.
 
 - test() - returns a boolean of whether the AST object is empty or not. Stick it at the end of your other statements for niceness
-    __Examples__:
 
     ```javascript
     code.mustContain("ForStatement")
