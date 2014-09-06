@@ -5,7 +5,7 @@ Test out the framework at BLAH
 Please only enter one statement into the Advanced Unit Test box. code is a Code 
 object with _ast_ being the parsed version of what's in Student Code. test() has 
 already been appended to the end of whatever your enter into the Advanced Unit 
-Test box for niceness.
+Test box for niceness. Test Result should reflect that test().
 
 ##Framework API##
 
