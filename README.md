@@ -1,8 +1,65 @@
-Challenge Framework
+#Challenge Framework#
 
-A comparison of Acorn to Esprima:
+Test out the framework at BLAH
 
-- Acorn is 72% the size of Esprima.
+Please only enter one statement into the Advanced Unit Test box. code is a Code 
+object with _ast_ being the parsed version of what's in Student Code. test() has 
+already been appended to the end of whatever your enter into the Advanced Unit 
+Test box for niceness.
+
+##Framework API##
+
+- Code(_ast_) - _ast_ is an abstract syntax tree as specified by the [Mozilla parser API](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API) (can be output by both Acorn and Esprima). Creates a Code object upon which you find all the other methods below
+
+- mustContain(_type_) - _type_ is a string which matches one of the Node object types found in the [Mozilla parser API](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API#Node_objects). Tests to see if the Node object of type _type_ is within the AST wrapped by the Code object - essentially a whitelist of functionality. Returns a Code object with the first Node of type _type_ as the root of the AST. Empty AST if not found.
+
+    __Examples__:
+
+    ```javascript
+    code.mustContain("ForStatement");
+    code.mustContain("VariableDeclaration");
+    ```
+    is equivalent to "This program MUST use a 'for loop' and a 'variable declaration'."
+
+- mustNotContain(_type_) - same situation as mustContain, except returns the same Code object if the Node is not in the AST and returns nothing if it is contained. Used to test for a blacklist of functionality.
+
+    __Examples__:
+
+    ```javascript
+    code.mustNotContain("WhileStatement");
+    code.mustNotContain("IfStatement");
+    ```
+    is equivalent to "This program MUST NOT use a 'while loop' or an 'if statement'."
+
+- whichMustContain(_type_) - an alias for mustContain. Sounds better when you're chaining to determine the rough structure of a program.
+
+    __Examples__:
+
+    ```javascript
+    code.mustContain("ForStatement")
+        .whichMustContain("IfStatement");
+    ```
+    is equivalent to
+    ```javascript
+    var forStatement = code.mustContain("ForStatement");
+    forStatement.mustContain("IfStatement");
+    ```
+    which is equivalent to "There should be a 'for loop' and inside of it there should be an 'if statement'."
+
+- whichMustNotContain(_type_) - an alias for mustNotContain.
+
+- test() - returns a boolean of whether the AST object is empty or not. Stick it at the end of your other statements for niceness
+    __Examples__:
+
+    ```javascript
+    code.mustContain("ForStatement")
+        .whichMustContain("IfStatement")
+        .test();
+    ```
+
+##Acorn vs Esprima##
+
+- Acorn is 72% the size of Esprima (not minified).
 - Both support ECMAScript 5. Esprima only partly supports 6.
 - Acorn supports IE5 and on. Esprima only supports modern browsers.
 - Acorn's continuous integration has 800+ test cases. Esprima has 900+ test 
@@ -18,5 +75,3 @@ verbose.
 The main goals in my choosing a parser is ease of use as a developer and speed 
 for the end user. For the first goal, both libraries are adequate. For the 
   second, Acorn is better, thus that was the library I ended up going with.
-
-How does the Unit Test API look?

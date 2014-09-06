@@ -13,7 +13,7 @@
 <body>
   <div id="description"></div>
 
-  <p>Advanced Unit Tests:</p>
+  <p>Advanced Unit Test:</p>
   <textarea id="tests"></textarea>
 
   <p>Student Code:</p>
@@ -24,20 +24,17 @@
 
   <script src="codemirror.js"></script>
   <script src="acorn.js"></script>
+  <script src="api.js"></script>
   <script>
-    //TODO: write whitelist function
-    //TODO: write blacklist function
-    //TODO: write rough structure function
-    //TODO: make it easy to add additional APIs
-
     (function() {
       var $tests = CodeMirror.fromTextArea(document.getElementById('tests'), {
         mode: 'javascript'
       });
-      $tests.setSize(null, 100);
+      $tests.setSize(null, 75);
 
       $tests.setValue(
-        "TODO: example API calls"
+        'code.mustContain("ForStatement")\n' +
+        '\t.whichMustContain("IfStatement");'
       );
 
       var $code = CodeMirror.fromTextArea(document.getElementById('code'), {
@@ -55,11 +52,12 @@
             return;
           }
 
-          var parsed = acorn.parse(input);
+          var ast = acorn.parse(input);
 
-          //TODO: eval code from tests on parsed javascript
+          console.log(ast);
 
-          $output.innerHTML = parsed;
+          var code = Code(ast);
+          $output.innerHTML = eval($tests.getValue()).test();
         } catch (err) {
           $output.innerHTML = "Invalid javascript";
         }
