@@ -54,8 +54,6 @@
 
           var ast = acorn.parse(input);
 
-          console.log(ast);
-
           var code = Code(ast);
           $output.innerHTML = eval($tests.getValue()).test();
         } catch (err) {
