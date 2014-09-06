@@ -1,6 +1,6 @@
 #Challenge Framework#
 
-Test out the framework at BLAH
+Test out the framework at http://wangfowen.github.io/khan_interview
 
 Please only enter one statement into the Advanced Unit Test box. code is a Code 
 object with _ast_ being the parsed version of what's in Student Code. test() has 
