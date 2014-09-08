@@ -10,6 +10,7 @@ function Code(ast) {
 
     func(node);
 
+    //depth first recursion of children properties
     for (var property in node) {
       var child = node[property];
 
@@ -26,10 +27,23 @@ function Code(ast) {
   code.prototype.mustContain = function(type) {
     var newAst = [];
 
+    //if match, push children into array
+    //if it's a leaf child containing, should still push something that can't be traversed
+    //will only be empty if doesn't contain
     for (var i = 0; i < this.ast.length; i++) {
       this.traverse(this.ast[i], function(ast) {
         if (ast.type === type) {
-          newAst.push(ast);
+          for (var property in ast) {
+            var child = ast[property];
+
+            if (Array.isArray(child)) {
+              for (var i = 0; i < child.length; i++) {
+                newAst.push(child[i]);
+              }
+            } else {
+                newAst.push(child);
+            }
+          }
           return;
         }
       });

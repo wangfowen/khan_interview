@@ -2,16 +2,25 @@
 
 Test out the framework at http://wangfowen.github.io/khan_interview
 
-Please only enter one statement into the Advanced Unit Test box. code is a Code 
-object with _ast_ being the parsed version of what's in Student Code. test() has 
-already been appended to the end of whatever your enter into the Advanced Unit 
-Test box for niceness. Test Result should reflect that test().
+Write your tests in __Advanced Unit Test__. The tests will check the code in 
+__Student Code__. Student Code is parsed by Acorn (reasoning explained further 
+down in documentation) and wrapped in a Code object, reference-able within 
+Advanced Unit Test via the variable _code_.  Right now you can only run one test 
+case at a time in Advanced Unit Test.  test() has already been appended to the 
+end of what you enter into the box for niceness.  __Test Result__ should reflect 
+that test().
 
 ##Framework API##
 
 - Code(_ast_) - _ast_ is an abstract syntax tree as specified by the [Mozilla parser API](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API) (can be output by both Acorn and Esprima). Creates a Code object upon which you find all the other methods below
 
-- mustContain(_type_) - _type_ is a string which matches one of the Node object types found in the [Mozilla parser API](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API#Node_objects). Tests to see if the Node object of type _type_ is within the AST wrapped by the Code object - essentially a whitelist of functionality. Returns a Code object with the first Node of type _type_ as the root of the AST. Empty AST if not found.
+- mustContain(_type_) - _type_ is a string which matches one of the Node object 
+types found in the [Mozilla parser 
+API](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API#Node_objects). 
+Tests to see if the Node object of type _type_ is within the AST array of the 
+Code object - __essentially a whitelist of functionality__. Returns a Code 
+object with the children of the _type_ Node as the AST array. Empty AST array if 
+not found.
 
     ```javascript
     code.mustContain("ForStatement");
@@ -19,7 +28,9 @@ Test box for niceness. Test Result should reflect that test().
     ```
     is equivalent to "This program MUST use a 'for loop' and a 'variable declaration'."
 
-- mustNotContain(_type_) - same situation as mustContain, except returns the same Code object if the Node is not in the AST and returns nothing if it is contained. Used to test for a blacklist of functionality.
+- mustNotContain(_type_) - same situation as mustContain, except returns the 
+same Code object if the Node is not in the AST and returns empty array if it is. 
+__Used to test for a blacklist of functionality__.
 
     ```javascript
     code.mustNotContain("WhileStatement");
@@ -27,7 +38,8 @@ Test box for niceness. Test Result should reflect that test().
     ```
     is equivalent to "This program MUST NOT use a 'while loop' or an 'if statement'."
 
-- whichMustContain(_type_) - an alias for mustContain. Sounds better when you're chaining to determine the rough structure of a program.
+- whichMustContain(_type_) - an alias for mustContain. Sounds better when you're 
+chaining to __determine the rough structure of a program__.
 
     ```javascript
     code.mustContain("ForStatement")
@@ -42,7 +54,9 @@ Test box for niceness. Test Result should reflect that test().
 
 - whichMustNotContain(_type_) - an alias for mustNotContain.
 
-- test() - returns a boolean of whether the AST object is empty or not. Stick it at the end of your other statements for niceness
+- test() - returns a boolean of whether the AST object is empty or not. Stick it 
+at the end of your other statements to easily see whether your tests passed or 
+not.
 
     ```javascript
     code.mustContain("ForStatement")
@@ -88,4 +102,5 @@ verbose.
 
 The main goals in my choosing a parser is ease of use as a developer and speed 
 for the end user. For the first goal, both libraries are adequate. For the 
-  second, Acorn is better, thus that was the library I ended up going with.
+  second, __Acorn is better, thus that was the library I ended up going with for 
+  my test setup__.

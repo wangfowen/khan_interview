@@ -34,7 +34,8 @@
 
       $tests.setValue(
         'code.mustContain("ForStatement")\n' +
-        '\t.whichMustContain("IfStatement");'
+        '\t.whichMustContain("IfStatement")\n' +
+        '\t.whichMustNotContain("WhileStatement");'
       );
 
       var $code = CodeMirror.fromTextArea(document.getElementById('code'), {
@@ -42,9 +43,17 @@
       });
       $code.setSize(null, 200);
 
+      $code.setValue(
+        'for (var i = 0; i < 10; i++) {\n' +
+        '\tif (true) {\n' +
+        '\t\talert("yay!");\n' +
+        '\t}\n' +
+        '}'
+      );
+
       var $output = document.getElementById('output');
 
-      $code.on("change", function() {
+      function updateCode() {
         var ast;
 
         try {
@@ -67,7 +76,17 @@
           $output.innerHTML = "Invalid Advanced Unit Test: " + err.message;
           return;
         }
+      };
+
+      $tests.on("change", function() {
+        updateCode();
       });
+
+      $code.on("change", function() {
+        updateCode();
+      });
+
+      updateCode();
     })();
   </script>
 </body>
