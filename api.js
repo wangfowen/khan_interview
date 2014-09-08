@@ -1,6 +1,6 @@
 function Code(ast) {
   var code = function(ast) {
-    this.ast = ast;
+    this.ast = [ast];
   }
 
   code.prototype.traverse = function(node, func) {
@@ -24,19 +24,37 @@ function Code(ast) {
   };
 
   code.prototype.mustContain = function(type) {
-    var contains = false;
+    var newAst = [];
 
-    this.traverse(this.ast, function(ast) {
-      if (ast.type === type) {
-        contains = true;
-      }
-    });
+    for (var i = 0; i < this.ast.length; i++) {
+      this.traverse(this.ast[i], function(ast) {
+        if (ast.type === type) {
+          newAst.push(ast);
+          return;
+        }
+      });
+    }
 
-    return contains;
+    this.ast = newAst;
+
+    return this;
   };
 
   code.prototype.mustNotContain = function(type) {
-    return !this.mustContain(type);
+    var newAst = this.ast;
+
+    for (var i = 0; i < this.ast.length; i++) {
+      this.traverse(this.ast[i], function(ast) {
+        if (ast.type === type) {
+          newAst = [];
+          return;
+        }
+      });
+    }
+
+    this.ast = newAst;
+
+    return this;
   };
 
   code.prototype.whichMustContain = function(type) {
@@ -48,7 +66,7 @@ function Code(ast) {
   };
 
   code.prototype.test = function() {
-    return Object.getOwnPropertyNames(this.ast).length !== 0;
+    return this.ast.length !== 0;
   };
 
   return new code(ast);

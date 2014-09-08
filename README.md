@@ -3,18 +3,15 @@
 Test out the framework at http://wangfowen.github.io/khan_interview
 
 Please only enter one statement into the Advanced Unit Test box. code is a Code 
-object with _ast_ being the parsed version of what's in Student Code. Test 
-Result should reflect your test case.
+object with _ast_ being the parsed version of what's in Student Code. test() has 
+already been appended to the end of whatever your enter into the Advanced Unit 
+Test box for niceness. Test Result should reflect that test().
 
 ##Framework API##
 
 - Code(_ast_) - _ast_ is an abstract syntax tree as specified by the [Mozilla parser API](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API) (can be output by both Acorn and Esprima). Creates a Code object upon which you find all the other methods below
 
-- mustContain(_type_) - _type_ is a string which matches one of the Node object 
-  types found in the [Mozilla parser 
-  API](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API#Node_objects). 
-  Tests to see if the Node object of type _type_ is within the AST wrapped by 
-  the Code object - essentially a whitelist of functionality.
+- mustContain(_type_) - _type_ is a string which matches one of the Node object types found in the [Mozilla parser API](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Parser_API#Node_objects). Tests to see if the Node object of type _type_ is within the AST wrapped by the Code object - essentially a whitelist of functionality. Returns a Code object with the first Node of type _type_ as the root of the AST. Empty AST if not found.
 
     ```javascript
     code.mustContain("ForStatement");
@@ -22,9 +19,7 @@ Result should reflect your test case.
     ```
     is equivalent to "This program MUST use a 'for loop' and a 'variable declaration'."
 
-- mustNotContain(_type_) - same situation as mustContain, except returns false 
-if the Node object is within the AST. Used to test for a blacklist of 
-  functionality.
+- mustNotContain(_type_) - same situation as mustContain, except returns the same Code object if the Node is not in the AST and returns nothing if it is contained. Used to test for a blacklist of functionality.
 
     ```javascript
     code.mustNotContain("WhileStatement");
@@ -32,16 +27,28 @@ if the Node object is within the AST. Used to test for a blacklist of
     ```
     is equivalent to "This program MUST NOT use a 'while loop' or an 'if statement'."
 
-- whichMustContain(_type_) - an alias for mustContain. Sounds better when you 
-callback to determine the rough structure of a program.
+- whichMustContain(_type_) - an alias for mustContain. Sounds better when you're chaining to determine the rough structure of a program.
 
     ```javascript
-    code.mustContain("ForStatement", whichMustContain("IfStatement"))
+    code.mustContain("ForStatement")
+        .whichMustContain("IfStatement");
     ```
-    is equivalent to "There should be a 'for loop' and inside of it there should 
-    be an 'if statement'."
+    is equivalent to
+    ```javascript
+    var forStatement = code.mustContain("ForStatement");
+    forStatement.mustContain("IfStatement");
+    ```
+    which is equivalent to "There should be a 'for loop' and inside of it there should be an 'if statement'."
 
 - whichMustNotContain(_type_) - an alias for mustNotContain.
+
+- test() - returns a boolean of whether the AST object is empty or not. Stick it at the end of your other statements for niceness
+
+    ```javascript
+    code.mustContain("ForStatement")
+        .whichMustContain("IfStatement")
+        .test();
+    ```
 
 ##Improvements To Make##
 
@@ -49,15 +56,19 @@ Given more time, I'd add some security checks to make sure the students aren't
 abusing the Advanced Unit Test console. I'd drop the eval since that's dangerous 
 and parse the input instead to see which methods to be running.
 
-Additionally, I'd make it be able to chain functions. I originally tried that, 
-but couldn't make it work in a nice way. It'd also be neat if it could test 
-multiple conditions at once, stylistically the way d3 chains.  For example:
+I'd also either rename the methods or change the way they work so that it makes 
+more sense. mustContain suggests it'd return a boolean, but it doesn't unless 
+you append the test().
+
+Additionally, it'd be neat if it could test multiple conditions at once, 
+stylistically the way d3 chains. For example:
 
 ```javascript
 code.mustContain("ForStatement")
       .whichMustContain("IfStatement")
     .andMustContain("WhileStatement")
       .whichMustContain("VariableDeclaration")
+    .test();
 ```
 
 ##Acorn vs Esprima##
